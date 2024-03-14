@@ -47,7 +47,11 @@ public class S3ExtraSeedProvider extends SeedProvider {
 
     private S3Client buildClientWithDefaultCredentialsChain() {
         var builder = S3Client.builder().region(Region.EU_WEST_1);
-        builder.credentialsProvider(AwsCredentialsProviderChain.builder().addCredentialsProvider(DefaultCredentialsProvider.create()).build());
+        builder.credentialsProvider(AwsCredentialsProviderChain
+                .builder()
+                .addCredentialsProvider(DefaultCredentialsProvider.create())
+                .reuseLastProviderEnabled(false)
+                .build());
 
         return builder.build();
     }
