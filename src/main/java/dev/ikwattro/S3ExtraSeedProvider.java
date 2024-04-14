@@ -4,7 +4,6 @@ import com.neo4j.dbms.seeding.SeedProvider;
 import software.amazon.awssdk.auth.credentials.AwsCredentialsProviderChain;
 import software.amazon.awssdk.auth.credentials.DefaultCredentialsProvider;
 import software.amazon.awssdk.core.ResponseInputStream;
-import software.amazon.awssdk.regions.Region;
 import software.amazon.awssdk.services.s3.S3Client;
 import software.amazon.awssdk.services.s3.model.GetObjectRequest;
 import software.amazon.awssdk.services.s3.model.GetObjectResponse;
@@ -25,10 +24,9 @@ public class S3ExtraSeedProvider extends SeedProvider {
 
     @Override
     public Path download(String uri, Optional<String> credentials, Optional<String> config, Path path) {
-        try (var s3Client = buildClientWithDefaultCredentialsChain()) {
-
-            getLog().info("Attempting seed from `%s`".formatted(uri));
-            var location = S3SeedUtils.locationFromURI(uri);
+        getLog().info("Attempting seed from `%s`".formatted(uri));
+        var location = S3SeedUtils.locationFromURI(uri);
+        try (var s3Client = buildClientWithDefaultCredentialsChain(location)) {
 
             File outFile = new File(path + "/%s".formatted(location.fileKey()));
             getLog().info("Storing s3 object into `%s`".formatted(outFile.toPath()));
@@ -45,8 +43,8 @@ public class S3ExtraSeedProvider extends SeedProvider {
         }
     }
 
-    private S3Client buildClientWithDefaultCredentialsChain() {
-        var builder = S3Client.builder().region(Region.EU_WEST_1);
+    private S3Client buildClientWithDefaultCredentialsChain(S3SeedLocation location) {
+        var builder = S3Client.builder().region(location.region());
         builder.credentialsProvider(AwsCredentialsProviderChain
                 .builder()
                 .addCredentialsProvider(DefaultCredentialsProvider.create())

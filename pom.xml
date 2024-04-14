@@ -6,11 +6,11 @@
 
     <groupId>dev.ikwattro</groupId>
     <artifactId>neo4j-seed-providers-extra</artifactId>
-    <version>5.17.0-SNAPSHOT</version>
+    <version>5.19.0-SNAPSHOT</version>
 
     <properties>
         <aws.java.sdk.version>2.25.7</aws.java.sdk.version>
-        <neo4j.version>5.17.0</neo4j.version>
+        <neo4j.version>5.19.0</neo4j.version>
         <maven.compiler.source>17</maven.compiler.source>
         <maven.compiler.target>17</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
